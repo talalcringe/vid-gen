@@ -19,14 +19,13 @@ export const generateMarketingAssets = async (
       return;
     }
 
-    // 1) Generate product image
-    const imagePrompt = generateMarketingImagePrompt(productName, style);
+    // 1) Generate product image for "Suplimax"
+    const imagePrompt = generateMarketingImagePrompt();
     const imageResult = await generateProductImage(imagePrompt);
     const imageUrl = imageResult.imageUrl;
 
     // 2) Generate marketing video
     const videoPrompt = generateMarketingVideoPrompt({
-      productName,
       features,
       tone,
       audience,

@@ -1,41 +1,23 @@
-import { Request, Response, NextFunction } from 'express';
-import { RealEstateRequest } from '../types/index.js';
-import { generateVideoWithVeo } from '../services/gemini.service.js';
-import { generateRealEstateVideoPrompt } from '../utils/prompts.js';
+import { Request, Response, NextFunction } from "express";
+import { generateVideoWithVeo } from "../services/gemini.service.js";
+import { generateRealEstateVideoPrompt } from "../utils/prompts.js";
 
 export const generateRealEstateTour = async (
-  req: Request<{}, {}, RealEstateRequest>,
+  req: Request<{}, {}, { style?: string }>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const {
-      address,
-      price,
-      bedrooms = '3',
-      bathrooms = '2',
-      squareFootage = '2000',
-      features = 'spacious living area',
-      style = 'modern'
-    } = req.body;
+    // Per the assignment, we must use the exact property listing from the PDF.
+    // We only allow the 'style' to be customized via the request body.
+    const { style } = req.body;
 
-    if (!address || !price) {
-      res.status(400).json({ error: "Missing required fields: address and price are required" });
-      return;
-    }
-
-    const prompt = generateRealEstateVideoPrompt({
-      address,
-      price,
-      bedrooms,
-      bathrooms,
-      squareFootage,
-      features,
-      style
-    });
+    // The prompt function uses the hardcoded Beverly Hills property details by default.
+    // We pass the optional 'style' from the request to allow for customization.
+    const prompt = generateRealEstateVideoPrompt({ style });
 
     const result = await generateVideoWithVeo(prompt);
-    
+
     res.json({
       ...result,
       prompt,
