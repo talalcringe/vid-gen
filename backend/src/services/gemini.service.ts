@@ -27,8 +27,23 @@ const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 console.log("AI Client:", ai ? "✅ Initialized" : "❌ Null");
 
 export const generateVideoWithVeo = async (
-  prompt: string
+  prompt: string,
+  apiKey?: string
 ): Promise<VideoGenerationResponse> => {
+  // Use provided API key or fall back to environment variable
+  const effectiveApiKey = apiKey || process.env.GOOGLE_GEMINI_API_KEY;
+  
+  // If no API key is available at all, return mock response
+  if (!effectiveApiKey) {
+    console.log("No API key provided, using mock video");
+    return {
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      message: "Mock video generated (no API key configured)",
+    };
+  }
+  
+  // Initialize AI client with the effective API key
+  const ai = new GoogleGenAI({ apiKey: effectiveApiKey });
   if (!ai) {
     console.log("passed through here", process.env.GOOGLE_GEMINI_API_KEY, ai);
     return {
@@ -92,8 +107,23 @@ export const generateVideoWithVeo = async (
 };
 
 export const generateProductImage = async (
-  prompt: string
+  prompt: string,
+  apiKey?: string
 ): Promise<ImageGenerationResponse> => {
+  // Use provided API key or fall back to environment variable
+  const effectiveApiKey = apiKey || process.env.GOOGLE_GEMINI_API_KEY;
+  
+  // If no API key is available at all, return mock response
+  if (!effectiveApiKey) {
+    console.log("No API key provided, using mock image");
+    return {
+      imageUrl: "https://picsum.photos/seed/suplimax/512",
+      message: "Mock image generated (no API key configured)",
+    };
+  }
+  
+  // Initialize AI client with the effective API key
+  const ai = new GoogleGenAI({ apiKey: effectiveApiKey });
   if (!ai) {
     return {
       imageUrl: "https://picsum.photos/seed/suplimax/512",

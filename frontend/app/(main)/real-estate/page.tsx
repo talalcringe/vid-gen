@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -24,6 +23,7 @@ import {
 import { Loader2, Download } from "lucide-react";
 import { generateRealEstateVideo } from "@/lib/actions";
 import { VideoPlayer } from "@/components/video-player";
+import { toast } from "sonner";
 
 export default function RealEstatePage() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -49,17 +49,20 @@ export default function RealEstatePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsGenerating(true);
+    
+    const loadingToast = toast.loading('Generating your real estate video...');
 
     try {
-      // In a real application, this would call the actual API
-      // For demo purposes, we'll simulate a delay and use a placeholder video
       const result = await generateRealEstateVideo({
         ...propertyDetails,
         style: formData.style,
       });
       setVideoUrl(result.videoUrl);
+      toast.success('Real estate video generated successfully!', { id: loadingToast });
     } catch (error) {
       console.error("Error generating video:", error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to generate video. Please try again.';
+      toast.error(errorMessage, { id: loadingToast });
     } finally {
       setIsGenerating(false);
     }

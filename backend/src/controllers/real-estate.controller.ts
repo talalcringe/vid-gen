@@ -15,8 +15,9 @@ export const generateRealEstateTour = async (
     // The prompt function uses the hardcoded Beverly Hills property details by default.
     // We pass the optional 'style' from the request to allow for customization.
     const prompt = generateRealEstateVideoPrompt({ style });
+    const apiKey = req.headers['x-api-key'] as string | undefined;
 
-    const result = await generateVideoWithVeo(prompt);
+    const result = await generateVideoWithVeo(prompt, apiKey);
 
     res.json({
       ...result,

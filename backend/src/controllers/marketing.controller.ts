@@ -19,9 +19,11 @@ export const generateMarketingAssets = async (
       return;
     }
 
+    const apiKey = req.headers['x-api-key'] as string | undefined;
+    
     // 1) Generate product image for "Suplimax"
     const imagePrompt = generateMarketingImagePrompt();
-    const imageResult = await generateProductImage(imagePrompt);
+    const imageResult = await generateProductImage(imagePrompt, apiKey);
     const imageUrl = imageResult.imageUrl;
 
     // 2) Generate marketing video
@@ -32,7 +34,7 @@ export const generateMarketingAssets = async (
       style
     });
       
-    const videoResult = await generateVideoWithVeo(videoPrompt);
+    const videoResult = await generateVideoWithVeo(videoPrompt, apiKey);
 
     res.json({
       ...videoResult,

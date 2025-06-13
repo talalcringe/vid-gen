@@ -2,6 +2,14 @@
 
 const API_BASE_URL = "http://localhost:4000/api";
 
+// Helper to get API key from localStorage (runs on client side)
+const getApiKey = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem("geminiApiKey") || '';
+  }
+  return '';
+};
+
 interface MarketingVideoParams {
   productName: string;
   features: string;
@@ -22,10 +30,14 @@ interface RealEstateVideoParams {
 
 async function fetchWithErrorHandling(url: string, options: RequestInit) {
   try {
+    // Get API key from localStorage if available
+    const apiKey = getApiKey();
+    
     const response = await fetch(url, {
       ...options,
       headers: {
         "Content-Type": "application/json",
+        ...(apiKey ? { "X-API-Key": apiKey } : {}),
         ...options.headers,
       },
     });

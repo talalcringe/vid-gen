@@ -64,4 +64,6 @@
     color: var(--color-foreground);
     @apply transition-colors duration-300 antialiased;
   }
+
+
 }
