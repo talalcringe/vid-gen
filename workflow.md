@@ -1,0 +1,9 @@
+- init next project
+- use v0 for basic fronted
+- convert tailwind v3 to tailwind v4 using cascade
+- switch light and dark color, v0 was using themeprovider and setting default theme mode to dark, we dont need that
+- fix some tailwind errors
+- fix ui inconsistencies
+- use cascade to make endpoints to call the gemini api
+- use cascade to convert app to typescript
+- use cascade to refactor backend into routes,controllers and services
