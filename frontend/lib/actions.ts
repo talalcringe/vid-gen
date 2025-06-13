@@ -1,46 +1,83 @@
-"use server"
+"use server";
 
-// This is a mock implementation for demo purposes
-// In a real application, this would call the Google Gemini API
+const API_BASE_URL = "http://localhost:4000/api";
 
 interface MarketingVideoParams {
-  productName: string
-  features: string
-  tone: string
-  audience: string
-  style: string
+  productName: string;
+  features: string;
+  tone?: string;
+  audience?: string;
+  style?: string;
 }
 
 interface RealEstateVideoParams {
-  address: string
-  price: string
-  bedrooms: number
-  bathrooms: number
-  squareFootage: number
-  features: string
-  style: string
+  address: string;
+  price: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  squareFootage?: number;
+  features: string;
+  style: string;
+}
+
+async function fetchWithErrorHandling(url: string, options: RequestInit) {
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || "Failed to fetch data");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
+  }
 }
 
 export async function generateMarketingVideo(params: MarketingVideoParams) {
-  // Simulate API call delay
-  await new Promise((resolve) => setTimeout(resolve, 3000))
+  const response = await fetchWithErrorHandling(`${API_BASE_URL}/marketing`, {
+    method: "POST",
+    body: JSON.stringify({
+      productName: params.productName,
+      features: params.features,
+      tone: params.tone,
+      audience: params.audience,
+      style: params.style,
+    }),
+  });
 
-  // In a real implementation, this would call the Google Gemini API
-  // For demo purposes, return a placeholder video URL
   return {
-    videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-    message: "Video generated successfully",
-  }
+    videoUrl: response.videoUrl,
+    message: response.message || "Marketing video generated successfully",
+  };
 }
 
 export async function generateRealEstateVideo(params: RealEstateVideoParams) {
-  // Simulate API call delay
-  await new Promise((resolve) => setTimeout(resolve, 3000))
-
-  // In a real implementation, this would call the Google Gemini API
-  // For demo purposes, return a placeholder video URL
+  const response = await fetchWithErrorHandling(
+    `http://localhost:4000/api/real-estate`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        address: params.address,
+        price: params.price,
+        bedrooms: params.bedrooms,
+        bathrooms: params.bathrooms,
+        squareFootage: params.squareFootage,
+        features: params.features,
+        style: params.style,
+      }),
+    }
+  );
   return {
-    videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-    message: "Video generated successfully",
-  }
+    videoUrl: response.videoUrl,
+    message: response.message || "Real estate video generated successfully",
+  };
 }

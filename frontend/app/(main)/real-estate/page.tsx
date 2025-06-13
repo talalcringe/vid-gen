@@ -1,23 +1,36 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Loader2, Download } from "lucide-react"
-import { generateRealEstateVideo } from "@/lib/actions"
-import { VideoPlayer } from "@/components/video-player"
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Loader2, Download } from "lucide-react";
+import { generateRealEstateVideo } from "@/lib/actions";
+import { VideoPlayer } from "@/components/video-player";
 
 export default function RealEstatePage() {
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [videoUrl, setVideoUrl] = useState<string | null>(null)
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     style: "luxury",
-  })
+  });
 
   const propertyDetails = {
     address: "12012 Crest Ct, Beverly Hills, CA 90210",
@@ -27,15 +40,15 @@ export default function RealEstatePage() {
     squareFootage: 6100,
     features:
       "Luxury estate, three-car garage, landscaped grounds, elegant entrance with grand staircase, modern design, prime Beverly Hills location",
-  }
+  };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsGenerating(true)
+    e.preventDefault();
+    setIsGenerating(true);
 
     try {
       // In a real application, this would call the actual API
@@ -43,14 +56,14 @@ export default function RealEstatePage() {
       const result = await generateRealEstateVideo({
         ...propertyDetails,
         style: formData.style,
-      })
-      setVideoUrl(result.videoUrl)
+      });
+      setVideoUrl(result.videoUrl);
     } catch (error) {
-      console.error("Error generating video:", error)
+      console.error("Error generating video:", error);
     } finally {
-      setIsGenerating(false)
+      setIsGenerating(false);
     }
-  }
+  };
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-5xl">
@@ -77,10 +90,16 @@ export default function RealEstatePage() {
           <Card className="border-pink-500/20 bg-background/40 dark:bg-black/40 backdrop-blur-sm">
             <CardHeader>
               <CardTitle>Property Details</CardTitle>
-              <CardDescription>Beverly Hills luxury property information</CardDescription>
+              <CardDescription>
+                Beverly Hills luxury property information
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <form id="realEstateForm" onSubmit={handleSubmit} className="space-y-6">
+              <form
+                id="realEstateForm"
+                onSubmit={handleSubmit}
+                className="space-y-6"
+              >
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -103,8 +122,12 @@ export default function RealEstatePage() {
                       <p className="font-medium">{propertyDetails.bathrooms}</p>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-muted-foreground">Square Footage</Label>
-                      <p className="font-medium">{propertyDetails.squareFootage}</p>
+                      <Label className="text-muted-foreground">
+                        Square Footage
+                      </Label>
+                      <p className="font-medium">
+                        {propertyDetails.squareFootage}
+                      </p>
                     </div>
                   </div>
 
@@ -118,14 +141,18 @@ export default function RealEstatePage() {
                     <Select
                       name="style"
                       value={formData.style}
-                      onValueChange={(value) => handleSelectChange("style", value)}
+                      onValueChange={(value) =>
+                        handleSelectChange("style", value)
+                      }
                     >
                       <SelectTrigger className="bg-background/50">
                         <SelectValue placeholder="Select tour style" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="luxury">Luxury</SelectItem>
-                        <SelectItem value="family-friendly">Family-Friendly</SelectItem>
+                        <SelectItem value="family-friendly">
+                          Family-Friendly
+                        </SelectItem>
                         <SelectItem value="modern">Modern</SelectItem>
                         <SelectItem value="cinematic">Cinematic</SelectItem>
                         <SelectItem value="minimalist">Minimalist</SelectItem>
@@ -163,20 +190,25 @@ export default function RealEstatePage() {
           <Card className="border-purple-500/20 bg-background/40 dark:bg-black/40 backdrop-blur-sm h-full">
             <CardHeader>
               <CardTitle>Video Preview</CardTitle>
-              <CardDescription>Your generated property tour video will appear here</CardDescription>
+              <CardDescription>
+                Your generated property tour video will appear here
+              </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center">
               {isGenerating ? (
                 <div className="flex flex-col items-center justify-center h-64">
                   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-                  <p className="text-muted-foreground">Generating your video tour...</p>
+                  <p className="text-muted-foreground">
+                    Generating your video tour...
+                  </p>
                 </div>
               ) : videoUrl ? (
                 <VideoPlayer videoUrl={videoUrl} />
               ) : (
                 <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-muted rounded-lg p-6">
                   <p className="text-muted-foreground text-center">
-                    Select your tour style and click &quot;Generate Video Tour&quot; to create your property video
+                    Select your tour style and click &quot;Generate Video
+                    Tour&quot; to create your property video
                   </p>
                 </div>
               )}
@@ -195,5 +227,5 @@ export default function RealEstatePage() {
         </motion.div>
       </div>
     </div>
-  )
+  );
 }

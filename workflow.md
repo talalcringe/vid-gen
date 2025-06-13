@@ -7,3 +7,4 @@
 - use cascade to make endpoints to call the gemini api
 - use cascade to convert app to typescript
 - use cascade to refactor backend into routes,controllers and services
+- use cascade to integrate endpoints
