@@ -10,6 +10,13 @@ const getApiKey = () => {
   return '';
 };
 
+interface BaseVideoResponse {
+  videoUrl: string;
+  message: string;
+  isMock?: boolean;
+  mockReason?: string;
+}
+
 interface MarketingVideoParams {
   productName: string;
   features: string;
@@ -54,7 +61,7 @@ async function fetchWithErrorHandling(url: string, options: RequestInit) {
   }
 }
 
-export async function generateMarketingVideo(params: MarketingVideoParams) {
+export async function generateMarketingVideo(params: MarketingVideoParams): Promise<BaseVideoResponse> {
   const response = await fetchWithErrorHandling(`${API_BASE_URL}/marketing`, {
     method: "POST",
     body: JSON.stringify({
@@ -65,16 +72,18 @@ export async function generateMarketingVideo(params: MarketingVideoParams) {
       style: params.style,
     }),
   });
-
+  
   return {
     videoUrl: response.videoUrl,
     message: response.message || "Marketing video generated successfully",
-  };
+    isMock: response.isMock,
+    mockReason: response.mockReason,
+  } as BaseVideoResponse;
 }
 
-export async function generateRealEstateVideo(params: RealEstateVideoParams) {
+export async function generateRealEstateVideo(params: RealEstateVideoParams): Promise<BaseVideoResponse> {
   const response = await fetchWithErrorHandling(
-    `http://localhost:4000/api/real-estate`,
+    `${API_BASE_URL}/real-estate`,
     {
       method: "POST",
       body: JSON.stringify({
@@ -91,5 +100,7 @@ export async function generateRealEstateVideo(params: RealEstateVideoParams) {
   return {
     videoUrl: response.videoUrl,
     message: response.message || "Real estate video generated successfully",
-  };
+    isMock: response.isMock,
+    mockReason: response.mockReason,
+  } as BaseVideoResponse;
 }

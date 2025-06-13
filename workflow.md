@@ -4,7 +4,9 @@
 - switch light and dark color, v0 was using themeprovider and setting default theme mode to dark, we dont need that
 - fix some tailwind errors
 - fix ui inconsistencies
-- use cascade to make endpoints to call the gemini api
-- use cascade to convert app to typescript
-- use cascade to refactor backend into routes,controllers and services
-- use cascade to integrate endpoints
+- make endpoints to call the gemini api
+- convert app to typescript
+- refactor backend into routes,controllers and services
+- integrate endpoints
+- add dialog and toasts for better ux
+- notify if it's a mock video and why

@@ -35,21 +35,26 @@ export const generateVideoWithVeo = async (
   
   // If no API key is available at all, return mock response
   if (!effectiveApiKey) {
-    console.log("No API key provided, using mock video");
+    const mockReason = "No API key configured";
+    console.log(mockReason);
     return {
       videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-      message: "Mock video generated (no API key configured)",
+      message: `Mock video (${mockReason})`,
+      isMock: true,
+      mockReason,
     };
   }
   
   // Initialize AI client with the effective API key
   const ai = new GoogleGenAI({ apiKey: effectiveApiKey });
   if (!ai) {
-    console.log("passed through here", process.env.GOOGLE_GEMINI_API_KEY, ai);
+    const mockReason = "Failed to initialize AI client";
+    console.log(mockReason, process.env.GOOGLE_GEMINI_API_KEY, ai);
     return {
-      videoUrl:
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-      message: "Mock video generated successfully (no API key configured)",
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      message: `Mock video (${mockReason})`,
+      isMock: true,
+      mockReason,
     };
   }
 
@@ -83,28 +88,37 @@ export const generateVideoWithVeo = async (
     return {
       videoUrl: `${videoUri}&key=${process.env.GOOGLE_GEMINI_API_KEY}`,
       message: "Video generated successfully",
+      isMock: false
     };
   } catch (error) {
     console.error("Error generating video:", error);
 
-    // Check if the error is due to billing not enabled
+    // Check if the error is due to billing not enabled or other issues
     const errorMessage = error instanceof Error ? error.message : String(error);
-    if (
-      errorMessage.includes("billing") ||
-      errorMessage.includes("FAILED_PRECONDITION")
-    ) {
-      console.log("Falling back to mock video due to billing error");
-      return {
-        videoUrl:
-          "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-        message:
-          "Mock video generated (billing not enabled on Google Cloud account)",
-      };
+    let mockReason = "Unknown error";
+    
+    if (errorMessage.includes("billing") || errorMessage.includes("FAILED_PRECONDITION")) {
+      mockReason = "Billing not enabled on Google Cloud account";
+    } else if (errorMessage.includes("quota")) {
+      mockReason = "API quota exceeded";
+    } else if (errorMessage.includes("network")) {
+      mockReason = "Network error";
+    } else {
+      mockReason = `API error: ${errorMessage.substring(0, 100)}`;
     }
+    
+    console.log(`Falling back to mock video: ${mockReason}`);
+    return {
+      videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      message: `Mock video (${mockReason})`,
+      isMock: true,
+      mockReason,
+    };
+  };
 
-    throw new Error("Failed to generate video: " + errorMessage);
-  }
-};
+  // If we get here, there was an error but we don't have a specific message
+  throw new Error('Failed to generate video: Unknown error');
+}
 
 export const generateProductImage = async (
   prompt: string,

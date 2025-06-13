@@ -1,6 +1,8 @@
 export interface VideoGenerationResponse {
   videoUrl: string;
   message: string;
+  isMock?: boolean;
+  mockReason?: string;
 }
 
 export interface ImageGenerationResponse {

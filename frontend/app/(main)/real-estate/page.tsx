@@ -27,7 +27,11 @@ import { toast } from "sonner";
 
 export default function RealEstatePage() {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [videoData, setVideoData] = useState<{
+    url: string | null;
+    isMock?: boolean;
+    mockReason?: string;
+  }>({ url: null });
   const [formData, setFormData] = useState({
     style: "luxury",
   });
@@ -57,8 +61,18 @@ export default function RealEstatePage() {
         ...propertyDetails,
         style: formData.style,
       });
-      setVideoUrl(result.videoUrl);
-      toast.success('Real estate video generated successfully!', { id: loadingToast });
+      
+      setVideoData({
+        url: result.videoUrl,
+        isMock: result.isMock,
+        mockReason: result.mockReason,
+      });
+      
+      if (result.isMock) {
+        toast.warning('Using mock video: ' + result.mockReason, { id: loadingToast });
+      } else {
+        toast.success('Real estate video generated successfully!', { id: loadingToast });
+      }
     } catch (error) {
       console.error("Error generating video:", error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to generate video. Please try again.';
@@ -205,8 +219,12 @@ export default function RealEstatePage() {
                     Generating your video tour...
                   </p>
                 </div>
-              ) : videoUrl ? (
-                <VideoPlayer videoUrl={videoUrl} />
+              ) : videoData.url ? (
+                <VideoPlayer 
+                  videoUrl={videoData.url || ''} 
+                  isMock={videoData.isMock}
+                  mockReason={videoData.mockReason}
+                />
               ) : (
                 <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-muted rounded-lg p-6">
                   <p className="text-muted-foreground text-center">
@@ -219,8 +237,8 @@ export default function RealEstatePage() {
             <CardFooter>
               <Button
                 className="w-full bg-secondary hover:bg-secondary/80"
-                disabled={!videoUrl}
-                onClick={() => videoUrl && window.open(videoUrl, "_blank")}
+                disabled={!videoData.url}
+                onClick={() => videoData.url && window.open(videoData.url, "_blank")}
               >
                 <Download className="mr-2 h-4 w-4" />
                 Download Video

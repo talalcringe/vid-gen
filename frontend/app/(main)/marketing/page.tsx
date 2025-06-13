@@ -16,7 +16,11 @@ import { toast } from "sonner"
 
 export default function MarketingPage() {
   const [isGenerating, setIsGenerating] = useState(false)
-  const [videoUrl, setVideoUrl] = useState<string | null>(null)
+  const [videoData, setVideoData] = useState<{
+    url: string | null
+    isMock?: boolean
+    mockReason?: string
+  }>({ url: null })
   const [formData, setFormData] = useState({
     productName: "Suplimax",
     features: "Boosts energy, Enhances focus, Contains vitamins and minerals, Zero sugar",
@@ -42,8 +46,17 @@ export default function MarketingPage() {
 
     try {
       const result = await generateMarketingVideo(formData)
-      setVideoUrl(result.videoUrl)
-      toast.success('Marketing video generated successfully!', { id: loadingToast })
+      setVideoData({
+        url: result.videoUrl,
+        isMock: result.isMock,
+        mockReason: result.mockReason,
+      })
+      
+      if (result.isMock) {
+        toast.warning('Using mock video: ' + result.mockReason, { id: loadingToast })
+      } else {
+        toast.success('Marketing video generated successfully!', { id: loadingToast })
+      }
     } catch (error) {
       console.error("Error generating video:", error)
       const errorMessage = error instanceof Error ? error.message : 'Failed to generate video. Please try again.'
@@ -203,21 +216,25 @@ export default function MarketingPage() {
                   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
                   <p className="text-muted-foreground">Generating your video...</p>
                 </div>
-              ) : videoUrl ? (
-                <VideoPlayer videoUrl={videoUrl} />
               ) : (
-                <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-muted rounded-lg p-6">
-                  <p className="text-muted-foreground text-center">
-                    Configure your video settings and click &quot;Generate Marketing Video&quot; to create your video
-                  </p>
-                </div>
+                videoData.url ? (
+                  <VideoPlayer 
+                    videoUrl={videoData.url} 
+                    isMock={videoData.isMock}
+                    mockReason={videoData.mockReason}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-64 border-2 border-dashed border-muted rounded-lg">
+                    <p className="text-muted-foreground">Your generated video will appear here</p>
+                  </div>
+                )
               )}
             </CardContent>
             <CardFooter>
               <Button
                 className="w-full bg-secondary hover:bg-secondary/80"
-                disabled={!videoUrl}
-                onClick={() => videoUrl && window.open(videoUrl, "_blank")}
+                disabled={!videoData.url}
+                onClick={() => videoData.url && window.open(videoData.url, "_blank")}
               >
                 <Download className="mr-2 h-4 w-4" />
                 Download Video
