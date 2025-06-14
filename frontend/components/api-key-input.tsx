@@ -34,17 +34,17 @@ export function ApiKeyInput() {
     }
   };
 
-  const handleOpenDialog = () => {
-    setShowDialog(true);
-  };
+  // const handleOpenDialog = () => {
+  //   setShowDialog(true);
+  // };
 
-  const handleCardClick = (e: React.MouseEvent) => {
-    const hasApiKey = localStorage.getItem("geminiApiKey");
-    if (!hasApiKey) {
-      e.preventDefault();
-      setShowDialog(true);
-    }
-  };
+  // const handleCardClick = (e: React.MouseEvent) => {
+  //   const hasApiKey = localStorage.getItem("geminiApiKey");
+  //   if (!hasApiKey) {
+  //     e.preventDefault();
+  //     setShowDialog(true);
+  //   }
+  // };
 
   // Handle continue from dialog
   const handleContinue = () => {
@@ -67,7 +67,7 @@ export function ApiKeyInput() {
 
   return (
     <>
-      <div className="w-full max-w-2xl mx-auto p-6 rounded-lg border border-pink-500/20 bg-black/40 backdrop-blur-sm">
+      <div className="w-full max-w-5xl mx-auto p-6 rounded-lg border border-pink-500/20 bg-black/40 backdrop-blur-sm">
         <div className="flex flex-col space-y-4">
           <div className="flex items-center gap-2">
             <Key className="h-5 w-5 text-pink-400" />

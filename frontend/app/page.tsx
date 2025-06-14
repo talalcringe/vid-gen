@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
+// import Link from "next/link";
 import { ArrowRight, Video } from "lucide-react";
 import { ApiKeyInput } from "@/components/api-key-input";
 import { useState } from "react";
@@ -23,7 +23,10 @@ export default function Home() {
   const router = useRouter();
 
   const handleCardClick = (e: React.MouseEvent, path: string) => {
-    const hasApiKey = typeof window !== "undefined" ? localStorage.getItem("geminiApiKey") : false;
+    const hasApiKey =
+      typeof window !== "undefined"
+        ? localStorage.getItem("geminiApiKey")
+        : false;
     if (hasApiKey) {
       router.push(path);
     } else {
@@ -127,17 +130,17 @@ export default function Home() {
         </div>
 
         {/* API Key Input */}
-        <div className="mt-16">
+        <div className="mt-8">
           <ApiKeyInput />
           <ApiKeyDialog
             open={showApiDialog}
             onOpenChange={setShowApiDialog}
             onContinue={() => {
               // Focus the API key input when user clicks "Enter API Key"
-              const input = document.getElementById('api-key-input')
+              const input = document.getElementById("api-key-input");
               if (input) {
-                input.scrollIntoView({ behavior: 'smooth', block: 'center' })
-                input.focus()
+                input.scrollIntoView({ behavior: "smooth", block: "center" });
+                input.focus();
               }
             }}
             onCancel={handleUseMockData}

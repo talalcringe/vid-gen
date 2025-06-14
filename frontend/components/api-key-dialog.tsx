@@ -31,8 +31,8 @@ export function ApiKeyDialog({
           <DialogDescription asChild>
             <div className="space-y-4 pt-2 text-muted-foreground">
               <div>
-                You haven't set up your Gemini API key yet. Without it, you'll
-                only see mock videos.
+                You haven&apos;t set up your Gemini API key yet. Without it,
+                you&apos;ll only see mock videos.
               </div>
               <div className="text-amber-400">
                 To generate real videos, please enter your API key in the field
