@@ -10,3 +10,6 @@
 - integrate endpoints
 - add dialog and toasts for better ux
 - notify if it's a mock video and why
+- set the project up for deployment
+- minor bug fixes
+- add cron job to ping the api
