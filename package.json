@@ -1,0 +1,25 @@
+{
+  "name": "vid-gen",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/talalcringe/vid-gen#readme",
+  "bugs": {
+    "url": "https://github.com/talalcringe/vid-gen/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talalcringe/vid-gen.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "frontend": "cd frontend && pnpm install && pnpm dev",
+    "backend": "cd backend && npm install && npm run dev",
+    "dev": "npm install &&concurrently \"npm run frontend\" \"npm run backend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
+}

@@ -1,0 +1,12 @@
+- init next project
+- use v0 for basic fronted
+- convert tailwind v3 to tailwind v4 using cascade
+- switch light and dark color, v0 was using themeprovider and setting default theme mode to dark, we dont need that
+- fix some tailwind errors
+- fix ui inconsistencies
+- make endpoints to call the gemini api
+- convert app to typescript
+- refactor backend into routes,controllers and services
+- integrate endpoints
+- add dialog and toasts for better ux
+- notify if it's a mock video and why
