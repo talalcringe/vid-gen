@@ -17,7 +17,7 @@
   "scripts": {
     "frontend": "cd frontend && pnpm install && pnpm dev",
     "backend": "cd backend && npm install && npm run dev",
-    "dev": "npm install &&concurrently \"npm run frontend\" \"npm run backend\""
+    "dev": "npm install && concurrently \"npm run frontend\" \"npm run backend\""
   },
   "devDependencies": {
     "concurrently": "^8.0.1"
