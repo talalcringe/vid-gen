@@ -1,13 +1,14 @@
 "use server";
 
-const API_BASE_URL = "http://localhost:4000/api";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000/api";
 
 // Helper to get API key from localStorage (runs on client side)
 const getApiKey = () => {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem("geminiApiKey") || '';
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("geminiApiKey") || "";
   }
-  return '';
+  return "";
 };
 
 interface BaseVideoResponse {
@@ -39,7 +40,7 @@ async function fetchWithErrorHandling(url: string, options: RequestInit) {
   try {
     // Get API key from localStorage if available
     const apiKey = getApiKey();
-    
+
     const response = await fetch(url, {
       ...options,
       headers: {
@@ -61,7 +62,9 @@ async function fetchWithErrorHandling(url: string, options: RequestInit) {
   }
 }
 
-export async function generateMarketingVideo(params: MarketingVideoParams): Promise<BaseVideoResponse> {
+export async function generateMarketingVideo(
+  params: MarketingVideoParams
+): Promise<BaseVideoResponse> {
   const response = await fetchWithErrorHandling(`${API_BASE_URL}/marketing`, {
     method: "POST",
     body: JSON.stringify({
@@ -72,7 +75,7 @@ export async function generateMarketingVideo(params: MarketingVideoParams): Prom
       style: params.style,
     }),
   });
-  
+
   return {
     videoUrl: response.videoUrl,
     message: response.message || "Marketing video generated successfully",
@@ -81,22 +84,21 @@ export async function generateMarketingVideo(params: MarketingVideoParams): Prom
   } as BaseVideoResponse;
 }
 
-export async function generateRealEstateVideo(params: RealEstateVideoParams): Promise<BaseVideoResponse> {
-  const response = await fetchWithErrorHandling(
-    `${API_BASE_URL}/real-estate`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        address: params.address,
-        price: params.price,
-        bedrooms: params.bedrooms,
-        bathrooms: params.bathrooms,
-        squareFootage: params.squareFootage,
-        features: params.features,
-        style: params.style,
-      }),
-    }
-  );
+export async function generateRealEstateVideo(
+  params: RealEstateVideoParams
+): Promise<BaseVideoResponse> {
+  const response = await fetchWithErrorHandling(`${API_BASE_URL}/real-estate`, {
+    method: "POST",
+    body: JSON.stringify({
+      address: params.address,
+      price: params.price,
+      bedrooms: params.bedrooms,
+      bathrooms: params.bathrooms,
+      squareFootage: params.squareFootage,
+      features: params.features,
+      style: params.style,
+    }),
+  });
   return {
     videoUrl: response.videoUrl,
     message: response.message || "Real estate video generated successfully",
