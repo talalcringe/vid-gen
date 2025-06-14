@@ -8,7 +8,6 @@ Express API server powering the AI Video Generator app, built with TypeScript.
 - [API Documentation](#-api-documentation)
 - [Development](#-development)
 - [Environment Variables](#-environment-variables)
-- [Testing](#-testing)
 - [Deployment](#-deployment)
 
 ## ✨ Features
@@ -141,16 +140,6 @@ NODE_ENV=development
 API_KEY=your_api_key_here
 AI_SERVICE_URL=https://api.ai-service.com/v1
 STORAGE_BUCKET=your-bucket-name
-```
-
-## 🧪 Testing
-
-```bash
-# Run tests
-npm test
-
-# Run tests with coverage
-npm run test:coverage
 ```
 
 ## 🚀 Deployment

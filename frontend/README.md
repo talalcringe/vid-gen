@@ -18,8 +18,6 @@ Next.js frontend for the AI Video Generator application, featuring a modern, res
 - [Available Scripts](#-available-scripts)
 - [Environment Variables](#-environment-variables)
 - [Deployment](#-deployment)
-- [Contributing](#-contributing)
-- [License](#-license)
 
 ## 🚀 Getting Started
 
